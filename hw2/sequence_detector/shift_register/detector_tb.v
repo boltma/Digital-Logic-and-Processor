@@ -45,6 +45,8 @@ initial begin
     #(`PERIOD) in = 1;
     #(`PERIOD) in = 0;
     #(`PERIOD) in = 0;
+    #(`PERIOD) in = 0;
+    #(`PERIOD) in = 0;
     #(`PERIOD) in = 1;
     #(`PERIOD) in = 0;
     #(`PERIOD) in = 1;
