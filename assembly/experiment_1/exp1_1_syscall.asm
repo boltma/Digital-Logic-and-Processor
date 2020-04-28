@@ -14,7 +14,7 @@ syscall
 move $a0, $v0		# move file descriptor to $a0
 addi $sp, $sp, -4	# allocate 4 bytes in stack for buffer
 move $a1, $sp		# load buffer address
-la $a2, 4			# read 4 bytes
+li $a2, 4			# read 4 bytes
 li $v0, 14			# system call for read from file
 syscall
 

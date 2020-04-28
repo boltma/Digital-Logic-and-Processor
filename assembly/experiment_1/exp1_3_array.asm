@@ -13,7 +13,7 @@ main:
 	subi $sp, $sp, 8	# allocate 2 bytes in stack for head
 	move $s2, $sp		# $s2 saves head address
 	sw $zero, 0($sp)	# head[0] = 0
-	sw $zero, 4($sp)	# head[0] = 0 (NULL)
+	sw $zero, 4($sp)	# head[1] = 0 (NULL)
 	
 	move $t0, $s2		# $t0 stores ptr
 	
