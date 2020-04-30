@@ -15,7 +15,7 @@ main:
 	# allocate buffer and read a integer to buffer
 	move $a0, $v0		# move file descriptor to $a0
 	la $a1, buffer		# load buffer address
-	li $a2, 1001		# read 1001 bytes
+	li $a2, 4004		# read 4004 bytes
 	li $v0, 14			# system call for read from file
 	syscall
 

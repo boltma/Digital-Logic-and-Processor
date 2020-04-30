@@ -12,7 +12,7 @@ main:
 	loop:
 		beq $s0, $0, exit	# exit if i == 0
 		beq $s1, $0, exit	# exit if j == 0
-		ble $s1, $s0, nswap	# jump from swapping if j >= i
+		ble $s1, $s0, nswap	# jump from swapping if j <= i
 		move $t0, $s0		# temp = i
 		move $s0, $s1		# i = j
 		move $s1, $t0		# j = temp
