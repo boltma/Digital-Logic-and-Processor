@@ -1,6 +1,6 @@
 module test(
-           input [1:0] testmode ,
-           input sysclk ,
+           input [1:0] testmode,
+           input sysclk,
            input modecontrol,
            output highfreq,
            output [7:0]cathodes,

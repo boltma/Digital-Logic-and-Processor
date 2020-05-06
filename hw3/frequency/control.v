@@ -35,7 +35,7 @@ always @(posedge clk) begin
         default: begin
             state <= 2'b00;
             reset <= 0;
-            enable <= 1;
+            enable <= 0;
             latch <= 1;
         end
     endcase
