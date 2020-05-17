@@ -21,7 +21,7 @@
 
 
 module mem
-#(parameter MEM_SIZE = 512)
+#(parameter MEM_SIZE = 2)
 (
     input clk,
     input [15:0] addr,

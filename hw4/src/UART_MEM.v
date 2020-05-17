@@ -24,6 +24,7 @@ module UART_MEM(
     input clk,      // 100MHz
     input rst,      // BTNU 
     input mem2uart, // SW0     
+    input invert,
     /*---------------------------MEM--------------------------------*/
     output reg recv_done,   // led 0 
     output reg send_done,   // led 1     
@@ -32,8 +33,8 @@ module UART_MEM(
     output Tx_Serial
     );
     
-    parameter CLKS_PER_BIT = 16'd10417;  // 100M/9600
-    parameter MEM_SIZE = 512;
+    parameter CLKS_PER_BIT = 16'd100;  // 100M/9600
+    parameter MEM_SIZE = 2;
     
     
     /*--------------------------------UART RX-------------------------*/
@@ -99,6 +100,8 @@ module UART_MEM(
         .wdata(wdata1)
         );
         
+    reg [1:0] invert_state;
+    
     /*----------------------------------MEM Control----------------------------*/
     
     reg [2:0] byte_cnt;
@@ -125,8 +128,10 @@ module UART_MEM(
             Tx_DV <= 1'b0;
             Tx_Byte <= 8'd0;
             send_done <= 1'b0;
+            
+            invert_state <= 2'b11;
         end
-        else
+        else if (~invert)
         begin
             // uart to memory
             if(Rx_DV)begin
@@ -170,7 +175,7 @@ module UART_MEM(
                 wr_en0 <= 1'b0;
                 wr_en1 <= 1'b0;
                 
-                if(addr1 == MEM_SIZE && recv_done == 1'b0)begin  // receive done
+                if(addr1 == MEM_SIZE && recv_done == 1'b0 && mem2uart==1'b0)begin  // receive done
                     recv_done <= 1'b1;
                     addr1 <= 16'd0;
                     byte_cnt <= 3'd0;
@@ -210,6 +215,31 @@ module UART_MEM(
                     Tx_DV <= 1'b0;
                 end
             end       
+        end
+        else begin
+            wdata1 <= ~rdata1;
+            case(invert_state)
+                2'b00: begin
+                    wr_en1 <= 1'b0;
+                    invert_state <= 2'b01;
+                end
+                2'b01: begin
+                    wr_en1 <= 1'b1;
+                    invert_state <= 2'b10;
+                end
+                2'b10: begin
+                    wr_en1 <= 1'b1;
+                    if(addr1 == MEM_SIZE && recv_done == 1'b0) begin  // invert done
+                        recv_done <= 1'b1;
+                    end
+                    invert_state <= 2'b11;
+                end
+                2'b11: begin
+                    addr1 <= addr1 + 1'b1;
+                    wr_en1 <= 1'b0;
+                    invert_state <= 2'b00;
+                end
+            endcase
         end
     end
 endmodule
