@@ -1,6 +1,8 @@
 
-module CPU(reset, clk);
+module CPU(control, reset, clk, register);
 	input reset, clk;
+	input [1:0] control;
+	output [7:0] register;
 	
 	reg [31:0] PC;
 	wire [31:0] PC_next;
@@ -38,9 +40,9 @@ module CPU(reset, clk);
 	wire [31:0] Databus1, Databus2, Databus3;
 	wire [4:0] Write_register;
 	assign Write_register = (RegDst == 2'b00)? Instruction[20:16]: (RegDst == 2'b01)? Instruction[15:11]: 5'b11111;
-	RegisterFile register_file1(.reset(reset), .clk(clk), .RegWrite(RegWrite), 
+	RegisterFile register_file1(.control(control), .reset(reset), .clk(clk), .RegWrite(RegWrite), 
 		.Read_register1(Instruction[25:21]), .Read_register2(Instruction[20:16]), .Write_register(Write_register),
-		.Write_data(Databus3), .Read_data1(Databus1), .Read_data2(Databus2));
+		.Write_data(Databus3), .Read_data1(Databus1), .Read_data2(Databus2), .register(register));
 	
 	wire [31:0] Ext_out;
 	assign Ext_out = {ExtOp? {16{Instruction[15]}}: 16'h0000, Instruction[15:0]};
